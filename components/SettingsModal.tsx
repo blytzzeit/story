@@ -79,6 +79,17 @@ const SettingsModal: React.FC<Props> = ({ open, onClose }) => {
               placeholder="Voice ID (z.B. JBFqnCBsd6RMkjVDRZzb)" 
               className="w-full bg-black/40 border border-white/10 rounded px-3 py-2 text-sm mt-1" 
             />
+            <select
+              value={s.elevenLabsModel}
+              onChange={e => setS({...s, elevenLabsModel: e.target.value})}
+              className="w-full bg-black/40 border border-white/10 rounded px-3 py-2 text-sm mt-1 outline-none text-slate-200"
+              title="ElevenLabs TTS-Modell"
+            >
+              <option value="eleven_multilingual_v4">Eleven Multilingual v4 (empfohlen, Deutsch)</option>
+              <option value="eleven_v4">Eleven v4 (Englisch)</option>
+              <option value="eleven_multilingual_v2">Eleven Multilingual v2</option>
+              <option value="eleven_v3">Eleven v3 (alt)</option>
+            </select>
           </div>
 
           <div className="space-y-2">

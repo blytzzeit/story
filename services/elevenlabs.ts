@@ -1,4 +1,4 @@
-import { getElevenLabsKey, getElevenLabsVoiceId } from './settings';
+import { getElevenLabsKey, getElevenLabsVoiceId, getElevenLabsModel } from './settings';
 
 export const getElevenLabsUserInfo = async (): Promise<{ used: number, limit: number }> => {
   const apiKey = getElevenLabsKey();
@@ -41,6 +41,7 @@ export const getElevenLabsUserInfo = async (): Promise<{ used: number, limit: nu
 export const generateElevenLabsAudio = async (text: string): Promise<{ audioBase64: string, characterCount: number }> => {
   const apiKey = getElevenLabsKey();
   const voiceId = getElevenLabsVoiceId();
+  const modelId = getElevenLabsModel();
 
   if (!apiKey) {
     throw new Error('ElevenLabs API Key fehlt in den Einstellungen.');
@@ -52,10 +53,10 @@ export const generateElevenLabsAudio = async (text: string): Promise<{ audioBase
     throw new Error('ElevenLabs Voice ID fehlt in den Einstellungen.');
   }
 
-  // V3 hat ein Zeichenlimit von 5000 Zeichen pro Request
-  const V3_CHAR_LIMIT = 5000;
-  if (text.length > V3_CHAR_LIMIT) {
-    throw new Error(`Text ist zu lang für ElevenLabs V3 (${text.length} Zeichen). Maximum: ${V3_CHAR_LIMIT}. Bitte kürze den Text.`);
+  // Zeichenlimit pro Request (v4 und v3: 5000 Zeichen)
+  const CHAR_LIMIT = 5000;
+  if (text.length > CHAR_LIMIT) {
+    throw new Error(`Text ist zu lang für ElevenLabs (${text.length} Zeichen). Maximum: ${CHAR_LIMIT}. Bitte kürze den Text.`);
   }
 
   const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
@@ -67,7 +68,7 @@ export const generateElevenLabsAudio = async (text: string): Promise<{ audioBase
     },
     body: JSON.stringify({
       text: text,
-      model_id: 'eleven_v3',
+      model_id: modelId,
       voice_settings: {
         stability: 0.5,
         similarity_boost: 0.75,
@@ -90,7 +91,7 @@ export const generateElevenLabsAudio = async (text: string): Promise<{ audioBase
 
     if (response.status === 401) errHint = ' (API Key ungültig oder abgelaufen)';
     else if (response.status === 404) errHint = ' (Voice ID nicht gefunden - prüfe die Einstellungen)';
-    else if (response.status === 422) errHint = ' (Text/Parameter ungültig für V3)';
+    else if (response.status === 422) errHint = ' (Text/Parameter ungültig für das gewählte Modell)';
     else if (response.status === 429) errHint = ' (Rate-Limit erreicht - warte kurz)';
     else if (response.status === 400 && /quota|limit|character/i.test(String(errDetail))) errHint = ' (Kontingent erschöpft)';
 

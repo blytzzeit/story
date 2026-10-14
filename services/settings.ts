@@ -15,6 +15,7 @@ export interface ZBSettings {
   perplexityApiKey: string;
   elevenLabsApiKey: string;
   elevenLabsVoiceId: string;
+  elevenLabsModel: string;
   auphonicApiKey: string;
   auphonicPresetUuid: string;
   shortRulesEnabled: boolean;
@@ -40,6 +41,7 @@ const defaults: ZBSettings = {
   perplexityApiKey: '',
   elevenLabsApiKey: '',
   elevenLabsVoiceId: 'JBFqnCBsd6RMkjVDRZzb', // Example default voice ID
+  elevenLabsModel: 'eleven_multilingual_v4',
   auphonicApiKey: '',
   auphonicPresetUuid: '',
   shortRulesEnabled: true,
@@ -112,6 +114,10 @@ export function getElevenLabsKey(): string {
 
 export function getElevenLabsVoiceId(): string {
   return getSettings().elevenLabsVoiceId || '';
+}
+
+export function getElevenLabsModel(): string {
+  return getSettings().elevenLabsModel || 'eleven_multilingual_v4';
 }
 
 export function getAuphonicKey(): string {

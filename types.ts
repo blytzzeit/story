@@ -101,6 +101,7 @@ export interface SegmentControls {
   insta_seconds: number;
   news_tiktok: boolean;
   series_parts: number;
+  long_format: boolean;
 }
 
 export interface HistoryStateSnapshot {

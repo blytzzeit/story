@@ -24,7 +24,7 @@ export const generateScriptWithControls = async (dossier: string, facts: string,
         const apiKey = getOpenAIKey();
         const seconds = controls.target_seconds || 60;
         const targetWords = Math.round((seconds / 45) * 100);
-        const isLongFormat = seconds >= 480;
+        const isLongFormat = controls.long_format || seconds >= 480;
 
         let promptTemplate = isLongFormat 
             ? loadPrompt('script_generation', 'write_and_fit_long')

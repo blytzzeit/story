@@ -128,6 +128,35 @@ const SettingsModal: React.FC<Props> = ({ open, onClose }) => {
           </div>
           
           <div className="space-y-3">
+            <div className="text-[10px] uppercase font-bold text-slate-500">Schreibstil</div>
+            <label className="flex items-start gap-3 cursor-pointer group p-2 rounded-lg bg-gradient-to-r from-violet-500/10 to-transparent border border-violet-500/20">
+              <input 
+                type="checkbox" 
+                checked={s.zeitblytzMode} 
+                onChange={e => setS({...s, zeitblytzMode: e.target.checked})} 
+                className="w-5 h-5 rounded accent-violet-500 mt-0.5"
+              />
+              <div>
+                <div className="text-sm font-black text-violet-300 group-hover:text-violet-200 transition-colors">⚡ ZEITBLYTZ-MODUS (EMPFOHLEN)</div>
+                <div className="text-[10px] text-slate-400 leading-relaxed">Master-Schalter: Aktiviert die komplette ZEITBLYTZ-Marken-DNA. Kombiniert 5-Block-System, Poschardt-Argumentationsstil und virale Psychologie. Deaktivieren für neutralen Redakteur-Ton.</div>
+              </div>
+            </label>
+            <label className="flex items-center gap-3 cursor-pointer group">
+              <input 
+                type="checkbox" 
+                checked={s.poschardtStyle || s.zeitblytzMode} 
+                disabled={s.zeitblytzMode}
+                onChange={e => setS({...s, poschardtStyle: e.target.checked})} 
+                className="w-4 h-4 rounded accent-violet-500 disabled:opacity-40"
+              />
+              <div className={s.zeitblytzMode ? 'opacity-50' : ''}>
+                <div className="text-xs font-bold text-slate-300 group-hover:text-white transition-colors">Ulf Poschardt-Stil {s.zeitblytzMode && <span className="text-[9px] text-violet-400">(im ZEITBLYTZ-Modus enthalten)</span>}</div>
+                <div className="text-[10px] text-slate-500">Kulturjournalistischer Pop-Denker-Ton: popkulturelle Metaphern, sarkastisch-distanzierte Haltung, intellektuell aber leicht.</div>
+              </div>
+            </label>
+          </div>
+
+          <div className="space-y-3">
             <div className="text-[10px] uppercase font-bold text-slate-500">Shadowban-Schutz</div>
             <label className="flex items-center gap-3 cursor-pointer group">
               <input 

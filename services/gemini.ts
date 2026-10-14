@@ -205,8 +205,8 @@ export const generateScriptWithControls = async (dossier: string, facts: string,
     // Calculation: 100 words = 45 seconds
     const targetWords = Math.round((seconds / 45) * 100);
     
-    // Check if long format (>= 8 mins / 480 seconds)
-    const isLongFormat = seconds >= 480;
+    // Check if long format (explicit toggle or >= 8 min)
+    const isLongFormat = controls.long_format || seconds >= 480;
 
     // Load template based on format length
     let promptTemplate = isLongFormat 

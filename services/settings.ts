@@ -18,6 +18,8 @@ export interface ZBSettings {
   auphonicApiKey: string;
   auphonicPresetUuid: string;
   shortRulesEnabled: boolean;
+  poschardtStyle: boolean;
+  zeitblytzMode: boolean;
   youtubeShadowbanAvoid: boolean;
   tiktokShadowbanAvoid: boolean;
   speedupEnabled: boolean;
@@ -41,6 +43,8 @@ const defaults: ZBSettings = {
   auphonicApiKey: '',
   auphonicPresetUuid: '',
   shortRulesEnabled: true,
+  poschardtStyle: false,
+  zeitblytzMode: true,
   youtubeShadowbanAvoid: false,
   tiktokShadowbanAvoid: false,
   speedupEnabled: true,

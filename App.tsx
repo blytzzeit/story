@@ -83,10 +83,11 @@ const CONTROL_LABELS: Record<keyof SegmentControls, string> = {
     insta_seconds: "IG Wisdom Duration",
     news_tiktok: "TikTok Optimization",
     series_parts: "Serie Teile",
-    length: "Target Length" // Will be hidden
+    length: "Target Length", // Will be hidden
+    long_format: "Langformat" // Hidden - handled by toggle
 };
 
-const DEFAULT_CONTROLS: SegmentControls = { info: 5, style: 5, metaphor: 5, length: 5, x_source: 1, fact_intensity: 5, dialogue_seconds: 60, target_seconds: 60, news_seconds: 30, insta_seconds: 45, news_tiktok: false, series_parts: 3 };
+const DEFAULT_CONTROLS: SegmentControls = { info: 5, style: 5, metaphor: 5, length: 5, x_source: 1, fact_intensity: 5, dialogue_seconds: 60, target_seconds: 60, news_seconds: 30, insta_seconds: 45, news_tiktok: false, series_parts: 3, long_format: false };
 
 type LegalVerdict = 'green' | 'yellow' | 'red';
 type LegalIssue = { problematicQuote: string; whyRisky: string; saferRewrite: string };
@@ -531,6 +532,13 @@ export const App: React.FC = () => {
         setSettingsVersion(v => v + 1);
         addLog(`SHORTRULES ${nextValue ? 'aktiviert' : 'deaktiviert'}`, nextValue ? 'success' : 'info');
     }, [SETTINGS.shortRulesEnabled, addLog]);
+
+    const toggleZeitblytzMode = useCallback(() => {
+        const nextValue = !SETTINGS.zeitblytzMode;
+        saveSettings({ zeitblytzMode: nextValue });
+        setSettingsVersion(v => v + 1);
+        addLog(`ZEITBLYTZ-MODUS ${nextValue ? 'aktiviert' : 'deaktiviert'}`, nextValue ? 'success' : 'info');
+    }, [SETTINGS.zeitblytzMode, addLog]);
 
     // Helper to check if current version is final
     const checkProtection = useCallback(() => {
@@ -2373,15 +2381,18 @@ export const App: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex gap-2 md:gap-4 items-center">
-                    {activeProject?.segmentControls?.[MAIN_ID]?.target_seconds && 
-                     activeProject.segmentControls[MAIN_ID].target_seconds <= 60 && 
+                    {activeProject?.segmentControls?.[MAIN_ID]?.target_seconds &&
+                     !activeProject.segmentControls[MAIN_ID].long_format &&
                      (activeProject.segmentControls[MAIN_ID].target_seconds < 35 || activeProject.segmentControls[MAIN_ID].target_seconds > 40) && (
-                        <div className="hidden md:flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-lg" title="Warnung: Vorgeschriebene Zeit überschritten">
-                            <span className="text-xs font-bold text-red-500">⚠️ ZEIT-WARNUNG: {activeProject.segmentControls[MAIN_ID].target_seconds}s verletzt die 35-40s Kurzvideo-Regel!</span>
+                        <div className="hidden md:flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-lg" title="Hinweis: Optimaler Kurzvideo-Bereich">
+                            <span className="text-xs font-bold text-amber-400">💡 TIPP: {activeProject.segmentControls[MAIN_ID].target_seconds}s — ideal für Shorts sind 35-40s</span>
                         </div>
                     )}
                     <button onClick={() => setSettingsOpen(true)} className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-all group shrink-0 border border-white/10" title="Einstellungen (API-Keys, Modelle, Audio-Settings)">
                         <svg className="w-4 h-4 text-slate-400 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    </button>
+                    <button onClick={toggleZeitblytzMode} className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all border whitespace-nowrap ${SETTINGS.zeitblytzMode ? 'bg-violet-500/20 text-violet-300 border-violet-400/40' : 'bg-white/5 text-slate-500 border-white/10 hover:text-white hover:bg-white/10'}`} title="ZEITBLYTZ-Modus: Komplette Marken-DNA (5-Block + Poschardt + virale Psychologie) aktivieren/deaktivieren">
+                        ⚡ ZEITBLYTZ
                     </button>
                     <button onClick={toggleShortRules} className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all border whitespace-nowrap ${SETTINGS.shortRulesEnabled ? 'bg-yellow-500/20 text-yellow-300 border-yellow-400/40' : 'bg-white/5 text-slate-500 border-white/10 hover:text-white hover:bg-white/10'}`} title="Strikte ZEITBLYTZ-Regeln (v3.5) für kurze Skripte aktivieren/deaktivieren">
                         SHORTRULES
@@ -2419,6 +2430,9 @@ export const App: React.FC = () => {
             <div className="md:hidden h-6 bg-slate-900/80 border-b border-white/5 flex items-center justify-between px-4">
                 <CloudStatusIndicator status={cloudStatus} lastSaved={lastSavedTime} />
                 <div className="flex items-center gap-2">
+                    <button onClick={toggleZeitblytzMode} className={`px-2 py-0.5 rounded text-[8px] font-black uppercase border ${SETTINGS.zeitblytzMode ? 'bg-violet-500/20 text-violet-300 border-violet-400/40' : 'bg-white/5 text-slate-500 border-white/10'}`}>
+                        ⚡ ZB
+                    </button>
                     <button onClick={toggleShortRules} className={`px-2 py-0.5 rounded text-[8px] font-black uppercase border ${SETTINGS.shortRulesEnabled ? 'bg-yellow-500/20 text-yellow-300 border-yellow-400/40' : 'bg-white/5 text-slate-500 border-white/10'}`}>
                         SR
                     </button>
@@ -2630,7 +2644,7 @@ export const App: React.FC = () => {
                                         <div className="space-y-6 p-4 bg-black/20 rounded-2xl border border-white/5">
                                             <h3 className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Refinement Controls</h3>
                                             {Object.entries(controls).map(([key, val]) => {
-                                                if (key === 'info' || key === 'dialogue_seconds' || key === 'target_seconds' || key === 'news_seconds' || key === 'insta_seconds' || key === 'news_tiktok' || key === 'series_parts' || key === 'length') return null; 
+                                                if (key === 'info' || key === 'dialogue_seconds' || key === 'target_seconds' || key === 'news_seconds' || key === 'insta_seconds' || key === 'news_tiktok' || key === 'series_parts' || key === 'length' || key === 'long_format') return null; 
                                                 return (
                                                 <div key={key} className="space-y-2">
                                                     <div className="flex justify-between text-[10px] uppercase font-bold text-slate-400">
@@ -2644,19 +2658,47 @@ export const App: React.FC = () => {
                                             {/* Write & Fit Logic */}
                                             <div className="pt-4 border-t border-white/5 space-y-4">
                                                 <div className="space-y-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <span className="text-[10px] uppercase font-bold text-amber-400">Modus</span>
+                                                        <div className="flex bg-black/40 rounded-lg p-1 border border-white/10">
+                                                            <button
+                                                                onClick={() => {
+                                                                    const isLong = controls.long_format;
+                                                                    const clamped = isLong ? Math.min(90, Math.max(15, controls.target_seconds || 60)) : Math.max(120, controls.target_seconds || 120);
+                                                                    updateActiveProject({ segmentControls: { ...activeProject.segmentControls, [MAIN_ID]: { ...controls, long_format: false, target_seconds: clamped } } });
+                                                                }}
+                                                                className={`px-3 py-1 rounded-md text-[9px] font-black uppercase transition-all ${!controls.long_format ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40' : 'text-slate-500 hover:text-white'}`}
+                                                            >
+                                                                Kurz (max 90s)
+                                                            </button>
+                                                            <button
+                                                                onClick={() => {
+                                                                    const clamped = Math.max(120, Math.min(600, controls.target_seconds || 120));
+                                                                    updateActiveProject({ segmentControls: { ...activeProject.segmentControls, [MAIN_ID]: { ...controls, long_format: true, target_seconds: clamped } } });
+                                                                }}
+                                                                className={`px-3 py-1 rounded-md text-[9px] font-black uppercase transition-all ${controls.long_format ? 'bg-violet-500/20 text-violet-300 border border-violet-400/40' : 'text-slate-500 hover:text-white'}`}
+                                                            >
+                                                                Lang (bis 10 Min)
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                     <div className="flex justify-between text-[10px] uppercase font-bold text-amber-400">
                                                         <span>Target Duration</span>
-                                                        <span className="text-lg font-bold">{formatTime(controls.target_seconds || 60)} Min</span>
+                                                        <span className="text-lg font-bold">{formatTime(controls.target_seconds || 60)}{controls.long_format ? ' Min' : 's'}</span>
                                                     </div>
-                                                    <input 
-                                                        type="range" 
-                                                        min="15" 
-                                                        max="900" 
-                                                        step="5"
-                                                        value={controls.target_seconds || 60} 
-                                                        onChange={(e) => updateActiveProject({ segmentControls: { ...activeProject.segmentControls, [MAIN_ID]: { ...controls, target_seconds: parseInt(e.target.value) } } })} 
-                                                        className="w-full h-1 bg-white/10 rounded-full appearance-none accent-amber-500" 
+                                                    <input
+                                                        type="range"
+                                                        min={controls.long_format ? "120" : "15"}
+                                                        max={controls.long_format ? "600" : "90"}
+                                                        step={controls.long_format ? "10" : "1"}
+                                                        value={controls.target_seconds || 60}
+                                                        onChange={(e) => updateActiveProject({ segmentControls: { ...activeProject.segmentControls, [MAIN_ID]: { ...controls, target_seconds: parseInt(e.target.value) } } })}
+                                                        className="w-full h-1 bg-white/10 rounded-full appearance-none accent-amber-500"
                                                     />
+                                                    <div className="flex justify-between text-[8px] text-slate-600">
+                                                        <span>{controls.long_format ? '2:00' : '15s'}</span>
+                                                        <span>{controls.long_format ? '10:00' : '90s'}</span>
+                                                    </div>
                                                 </div>
                                                 <button onClick={handleWriteAndFit} disabled={isZapping} className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/30 rounded-xl text-[10px] font-black uppercase transition-all shadow-lg text-white" title="Generiert ein Skript basierend auf dem eingestellten Zeit-Limit und den Schiebereglern (Fine-Tuning)">
                                                     Write & Fit by Style & Time

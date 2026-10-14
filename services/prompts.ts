@@ -905,7 +905,7 @@ BEISPIEL-SÄTZE ZU POSCHARDT-ARTIGEM TON (als Orientierung für Rhythmus und Hal
 
 WICHTIG: Behalte die ZEITBLYTZ-Struktur (5-Block-System) und die Fakten bei. Poschardt bestimmt NUR die Sprache, die Metaphern und die Haltung — nicht die Struktur oder die Inhalte.
 Keine Namensnennung Poschardts im Text. Kein "Wie Poschardt sagen würde...". Einfach so schreiben.
-Erlaube dir auch mal härtere Töne — Poschardt wird nicht immer nett. Aber: Die Wut ist echt, nicht gespielt. Kein Fake-Aufschrei.`;
+WUT IST ERLAUBT UND GEWOLLT: Wenn das Thema es rechtfertigt (Heuchelei, Dummheit, Verrat, Stillstand), darf die Wut durchscheinen — nicht aufgesetzt, sondern echt. Ein Kraftausdruck, eine harte Pointe, eine kurze Wut-Tirade. Poschardt ist nicht nett, wenn es nicht angebracht ist. Aber: Die Wut trägt das Argument, sie ersetzt es nicht. Kein Fake-Aufschrei.`;
 
 const ZEITBLYTZ_DNA_PROMPT = `⚡ ZEITBLYTZ-MODUS — MARKEN-DNA (ABSOLUTE BASIS) ⚡
 Dies ist der Kern, auf dem alles andere aufbaut. Jeder Text, den du schreibst, MUSS diese DNA tragen.
@@ -940,7 +940,7 @@ DIE ZEITBLYTZ-HALTUNG (DAS UNSICHTBARE):
 REGELN FÜR DIE SPACHE:
 - Popkulturelle Anspielungen: ja. Bildungsbürger-Posen: nein.
 - Konkrete Namen, Werke, Genres — als Kurzschluss, nicht als Zurschaustellung.
-- Sarkasmus ja. Biss ja. Echte Wut bei echter Absurdität — ja. Fake-Aufschrei — nein.
+- Sarkasmus ja. Biss ja. Echte Wut bei echter Absurdität — ja, ausdrücklich gewollt. Die Wut darf durchscheinen: ein Kraftausdruck, eine harte Pointe, eine kurze Wut-Tirade. Aber: Die Wut trägt das Argument, sie ersetzt es nicht. Fake-Aufschrei — nein.
 - Kurze Sätze. Atemregeln. Rhythmus vor Grammatik.
 - Keine KI-Floskeln ("Zusammenfassend", "Darüber hinaus", "Nicht zuletzt").
 - Emotion statt Information. Konkret statt abstrakt.
